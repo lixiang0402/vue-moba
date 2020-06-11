@@ -1,12 +1,13 @@
 const express = require("express")
 
 const app = express()
-// 接收post请求参数
-app.use(express.json())
+// app.use('/uploads', express.static(__dirname + '/uploads'))
+app.use("/uploads", express.static(__dirname + "/uploads"))
 // 跨域
 app.use(require('cors')())
-require("./routes/admin/index")(app)
+// 接收post参数
+app.use(express.json())
+require('./routes/admin/index')(app)
 app.listen(3000, () => {
     console.log("http://localhost:3000");
-
 })
