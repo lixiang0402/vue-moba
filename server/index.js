@@ -1,6 +1,8 @@
 const express = require("express")
 
 const app = express()
+// jsonwebtoken包 加密/解析用到的字符串 
+app.set("secret", "13hilsdj082u35jklasd124")
 // app.use('/uploads', express.static(__dirname + '/uploads'))
 app.use("/uploads", express.static(__dirname + "/uploads"))
 // 跨域

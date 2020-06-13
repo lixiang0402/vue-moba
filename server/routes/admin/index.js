@@ -3,6 +3,8 @@ module.exports = app => {
     const router = express.Router({
         mergeParams: true
     })
+    const jwt = require('jsonwebtoken')
+    const AdminUser = require('../../models/AdminUser')
     // 添加列表项
     router.post('/', async (req, res) => {
         try {
@@ -43,14 +45,30 @@ module.exports = app => {
         res.send({ success: true })
     })
     // require("../../middleware/allresouce")  :处理通用接口的中间件
-    app.use('/admin/api/rest/:resouce', require("../../middleware/allresouce"), router)
+    const auth = require("../../middleware/auth")
+    const resouce = require("../../middleware/resouce")
+    app.use('/admin/api/rest/:resouce', auth(), resouce(), router)
     // 处理上传图片接口
     // express处理 上传文件包  multer 
     const multer = require("multer")
     const upload = multer({ dest: __dirname + '/../../uploads' })
-    app.post("/admin/api/upload", upload.single('file'), async (req, res) => {
+    app.post("/admin/api/upload", auth(), upload.single('file'), async (req, res) => {
         const file = req.file
         file.url = `http://localhost:3000/uploads/${file.filename}`
         res.send(file)
+    })
+    app.post("/admin/api/login", async (req, res) => {
+        const { username, password } = req.body
+        let user = await AdminUser.findOne({ username }).select("+password")
+        // 检查用户是否存在
+        if (!user) return res.status(422).send({ message: "用户不存在" })
+        // 判断密码正确
+        const bcrypt = require("bcryptjs")
+        let valid = bcrypt.compareSync(password, user.password)
+        if (!valid) return res.status(422).send({ message: "密码错误" })
+        // 如果密码正确返回token
+        // 引入 jasonwebtoken包
+        const token = jwt.sign({ _id: user._id }, app.get('secret'))
+        res.send(token)
     })
 }
