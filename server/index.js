@@ -9,7 +9,10 @@ app.use("/uploads", express.static(__dirname + "/uploads"))
 app.use(require('cors')())
 // 接收post参数
 app.use(express.json())
+// 后台路由
 require('./routes/admin/index')(app)
+// 前端路由
+require("./routes/web/index")(app)
 app.listen(3000, () => {
     console.log("http://localhost:3000");
 })

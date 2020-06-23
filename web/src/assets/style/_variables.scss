@@ -1,0 +1,76 @@
+// -------------------------------------------------------------------------------------
+// 通用颜色
+$colors:("primary":#db9e3f,
+    "info":#4b67af,
+    "white":#fff,
+    "light":#f9f9f9,
+    "grey":#999,
+    "grey-1":#666,
+    "dark-1":#343440,
+    "dark":#222,
+    "black":#000,
+    "border-color":#ccc);
+
+// -------------------------------------------------------------------------------------
+
+//通用text对齐方式
+
+
+// -------------------------------------------------------------------------------------
+
+// 字体大小
+$base-font-size:1rem;
+$sizes:(xxs:0.6154, //8px
+    xs:0.7692, //10px
+    sm:0.9231, //12px
+    md:1, //13px
+    lg:1.0769, //14px
+    xl:1.2308 //16px
+);
+
+
+// -------------------------------------------------------------------------------------
+
+// flex布局
+
+// 主轴
+$flex-jc:("start":flex-start,
+    "end":flex-end,
+    "center":center,
+    "between":space-between,
+    "around":space-around);
+
+
+
+// 侧轴
+
+$flex-ai:("start":flex-start,
+    "end":flex-end,
+    "center":center,
+    "stretch":stretch);
+
+// 内外边距
+
+$spacing-types:(m:margin,
+    p:padding);
+$spacing-directions:(t:top,
+    b:bottom,
+    l:left,
+    r:right);
+$spaing-base-size:1rem;
+$spacing-sizes:(0:0,
+    1:0.25,
+    2:0.5,
+    3:1,
+    4:1.5,
+    5:3);
+
+$border-color:map-get($colors, "border-color");
+
+// 文字超过一行隐藏
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}

@@ -7,7 +7,7 @@
                 <!-- 基础信息 -->
                 <el-tab-pane label="基本信息" name="baseMessage">
                     <el-form-item label="英雄头像" prop="avatar">
-                        <el-upload class="avatar-uploader" :action="$http.defaults.baseURL+'/upload'" :show-file-list="false" :on-success="afterUpload">
+                        <el-upload class="avatar-uploader" :action="ActionUrl" :show-file-list="false" :headers="getAuthorization()" :on-success="afterUpload">
                             <img v-if="model.avatar" :src="model.avatar" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>

@@ -1,6 +1,6 @@
 const mongoose = require('../plugins/db')
 const schema = new mongoose.Schema({
-    name: { type: String, unique: true },
+    name: { type: String },
     avatar: { type: String },
     title: { type: String },
     categories: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Category' }],
@@ -39,4 +39,4 @@ const schema = new mongoose.Schema({
     }],
 })
 
-module.exports = mongoose.model("Hero", schema)
+module.exports = mongoose.model("Hero", schema, "heroes")
