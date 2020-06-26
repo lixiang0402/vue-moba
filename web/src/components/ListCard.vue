@@ -1,11 +1,11 @@
 <template>
-    <Card iconClass="sprite-news" label="新闻资讯">
+    <Card :iconClass="iconClass" :label="label">
         <div class="navbar pt-3 pb-2 d-flex jc-between">
             <div class="nav-item" @click="$refs.list.$swiper.slideTo(i)" v-for="(item,i) in categories" :key="i">
                 <div class="link" :class="active==i?'active':''">{{item.name}}</div>
             </div>
         </div>
-        <swiper ref="list" @slide-change="active=$refs.list.$swiper.realIndex">
+        <swiper ref="list" @slide-change="active=$refs.list.$swiper.realIndex" :options="{autoHeight:true}">
             <swiper-slide v-for="(category,i) in categories" :key="i">
                 <slot name="item" :category="category"></slot>
             </swiper-slide>

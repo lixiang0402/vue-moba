@@ -15,8 +15,8 @@
                                     <el-input v-model="item.url"></el-input>
                                 </el-form-item>
                                 <el-form-item style="margin-top:2rem" label="广告图片">
-                                    <el-upload class="avatar-uploader" :action="$http.defaults.baseURL+'/upload'" :show-file-list="false" :on-success="res=>$set(item,'img',res.url)">
-                                        <img v-if="item.img" :src="item.img" class="avatar">
+                                    <el-upload class="avatar-uploader" :headers="getAuthorization()" :action="ActionUrl" :show-file-list="false" :on-success="res=>$set(item,'img',res.url)">
+                                        <img v-if="item.img" v-lazy="item.img" class="avatar">
                                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                     </el-upload>
                                 </el-form-item>

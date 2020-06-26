@@ -3,6 +3,7 @@ const schema = new mongoose.Schema({
     name: { type: String },
     avatar: { type: String },
     title: { type: String },
+    banner: { type: String },
     categories: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Category' }],
     scores: {
         diffclut: { type: Number },
@@ -19,8 +20,8 @@ const schema = new mongoose.Schema({
         consume: { type: String },
         tips: { type: String }
     }],
-    item1: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Item" }],
-    item2: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Item" }],
+    items1: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Item" }],
+    items2: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Item" }],
     runes: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Rune" }],
     useTip: { type: String },
     battleTip: { type: String },
@@ -37,6 +38,8 @@ const schema = new mongoose.Schema({
         hero: { type: mongoose.SchemaTypes.ObjectId, ref: "Hero" },
         description: { type: String }
     }],
+}, {
+    timestamps: true
 })
 
 module.exports = mongoose.model("Hero", schema, "heroes")

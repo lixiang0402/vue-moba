@@ -1,0 +1,14 @@
+FROM node
+RUN mkdir /server
+COPY /middleware /server/middleware 
+COPY /models /server/models
+COPY /plugins /server/plugins
+COPY /routes /server/routes
+COPY /uploads /server/uploads
+COPY /index.js /server/index.js
+COPY /package.json /server/package.json
+WORKDIR /server
+RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN cnpm install
+EXPOSE 3000
+CMD ["node","index.js"]

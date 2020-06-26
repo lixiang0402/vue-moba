@@ -4,6 +4,11 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import http from './http'
+// 图片懒加载
+import VueLazyload from 'vue-lazyload'
+
+Vue.use(VueLazyload)
+
 Vue.config.productionTip = false
 Vue.prototype.$http = http
 Vue.mixin({

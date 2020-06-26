@@ -7,7 +7,7 @@
             </el-form-item>
             <el-form-item label="物品图片" prop="icon">
                 <el-upload class="avatar-uploader" :action="ActionUrl" :show-file-list="false" :on-success="afterUpload" :headers="getAuthorization()">
-                    <img v-if="model.icon" :src="model.icon" class="avatar">
+                    <img v-if="model.icon" v-lazy="model.icon" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>

@@ -3,10 +3,11 @@
         <div class="card-header py-3 d-flex ai-center">
             <i class="sprite" :class="iconClass"></i>
             <span class="fs-xl mx-2 flex-1">{{label}}</span>
-            <router-link to="/">
+            <router-link v-if="!pure" to="/">
                 <i class="sprite sprite-showmore"></i>
             </router-link>
         </div>
+        <div :class="pure==true?'':'border-bottom'"></div>
         <div class="card-body">
             <slot></slot>
         </div>
@@ -17,7 +18,8 @@
     export default {
         props: {
             iconClass: { type: String, required: true },
-            label: { type: String, required: true }
+            label: { type: String, required: true },
+            pure: { type: Boolean }
         },
         data() {
             return {
@@ -33,9 +35,11 @@
     @import "../assets/style/_variables.scss";
 
     .card {
-        .card-header {
-            border-bottom: 1px solid $border-color;
-        }
+        .card-header {}
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid $border-color;
     }
 
     .new {

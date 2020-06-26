@@ -1,0 +1,8 @@
+FROM nginx
+WORKDIR /usr/share/nginx/html
+RUN rm -f 50x.html
+RUN rm -f index.html
+COPY /js js
+COPY /index.html index.html
+COPY /css css
+EXPOSE 80

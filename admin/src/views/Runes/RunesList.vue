@@ -9,7 +9,7 @@
             </el-table-column>
             <el-table-column prop="icon" label="铭文图片">
                 <template slot-scope="scope">
-                    <img style="width:50px" :src="scope.row.icon">
+                    <img style="width:50px" v-lazy="scope.row.icon">
                 </template>
             </el-table-column>
             <el-table-column prop="property1" label="铭文属性1">

@@ -10,7 +10,7 @@
             </el-table-column>
             <el-table-column prop="icon" label="英雄头像" width="180">
                 <template slot-scope="scope">
-                    <img style="width:50px" :src="scope.row.avatar">
+                    <img style="width:50px" v-lazy="scope.row.avatar">
                 </template>
             </el-table-column>
             <el-table-column label="操作" width="170">

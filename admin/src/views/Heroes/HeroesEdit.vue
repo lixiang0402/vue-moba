@@ -7,8 +7,8 @@
                 <!-- 基础信息 -->
                 <el-tab-pane label="基本信息" name="baseMessage">
                     <el-form-item label="英雄头像" prop="avatar">
-                        <el-upload class="avatar-uploader" :action="ActionUrl" :show-file-list="false" :headers="getAuthorization()" :on-success="afterUpload">
-                            <img v-if="model.avatar" :src="model.avatar" class="avatar">
+                        <el-upload class="avatar-uploader" :action="ActionUrl" :show-file-list="false" :headers="getAuthorization()" :on-success="res=>model.avatar=res.url">
+                            <img v-if="model.avatar" v-lazy="model.avatar" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </el-form-item>
@@ -18,11 +18,20 @@
                     <el-form-item style="width:30%" label="英雄称号" prop="title">
                         <el-input v-model="model.title"></el-input>
                     </el-form-item>
+                    <el-form-item label="英雄背景" prop="banner">
+                        <el-upload class="avatar-uploader" :action="ActionUrl" :show-file-list="false" :headers="getAuthorization()" :on-success="res=>model.banner=res.url">
+                            <img v-if="model.banner" v-lazy="model.banner" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </el-form-item>
                     <el-form-item label="英雄类别" prop="categories">
                         <el-select v-model="model.categories" multiple placeholder="请选择">
                             <el-option v-for="item in categories" :key="item._id" :label="item.name" :value="item._id">
                             </el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item style="width:30%" label="皮肤数量" prop="skin">
+                        <el-input v-model="model.skin"></el-input>
                     </el-form-item>
                     <el-form-item label="英雄难度" prop="diffclut">
                         <el-rate style="marginTop:0.7rem" v-model="model.scores.diffclut" :max="10" show-score></el-rate>
@@ -37,13 +46,13 @@
                         <el-rate style="marginTop:0.7rem" v-model="model.scores.survival" :max="10" show-score></el-rate>
                     </el-form-item>
                     <el-form-item label="顺风出装" prop="item1">
-                        <el-select style="width:40rem" v-model="model.item1" multiple placeholder="请选择">
+                        <el-select style="width:40rem" v-model="model.items1" multiple placeholder="请选择">
                             <el-option v-for="item in items" :key="item._id" :label="item.name" :value="item._id">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="逆风出装" prop="item2">
-                        <el-select style="width:40rem" v-model="model.item2" multiple placeholder="请选择">
+                        <el-select style="width:40rem" v-model="model.items2" multiple placeholder="请选择">
                             <el-option v-for="item in items" :key="item._id" :label="item.name" :value="item._id">
                             </el-option>
                         </el-select>
@@ -80,10 +89,10 @@
                             <el-row type="flex" style="align-items: center;">
                                 <el-col :md="6">
                                     <el-form-item>
-                                        <el-upload :class="item.icon?'':'avatar-uploader'" :action="$http.defaults.baseURL+'/upload'" :show-file-list="false" :on-success="res=>$set(item,'icon',res.url)">
-                                            <img v-if="item.icon" :src="item.icon" class="avatar">
+                                        <el-upload :class="item.icon?'':'avatar-uploader'" :headers="getAuthorization()" :action="ActionUrl" :show-file-list="false" :on-success="res=>$set(item,'icon',res.url)">
+                                            <img v-if="item.icon" v-lazy="item.icon" class="avatar">
                                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                                            <div v-if="!(item.icon)" class="el-upload__text"> <em>英雄头像</em></div>
+                                            <div v-if="!(item.icon)" class="el-upload__text"> <em>技能图标</em></div>
                                         </el-upload>
                                     </el-form-item>
                                 </el-col>
@@ -112,6 +121,67 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
+                <!-- 最佳搭档 -->
+                <el-tab-pane label="最佳搭档" name="partners">
+                    <el-button @click="model.partners.push({})" style="margin-bottom:2rem" type="primary"> <i class="el-icon-plus"></i> 添加搭档</el-button>
+                    <el-row type="flex" style="flex-wrap:wrap">
+                        <el-col style="border:1px solid #ccc;padding:0.5rem;margin:0.5rem" v-for="(item,i) in model.partners" :key="i">
+                            <el-form-item label="搭档">
+                                <el-select v-model="item.hero" filterable placeholder="请选择">
+                                    <el-option v-for="hero in heroes" :key="hero._id" :label="hero.name" :value="hero._id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="配合描述">
+                                <el-input autosize placeholder="搭档配合描述" type="textarea" v-model="item.description"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="danger" @click="model.partners.splice(i,1)">删除搭档</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <!-- 被谁克制 -->
+                <el-tab-pane label="被谁克制" name="naturalEnemys">
+                    <el-button @click="model.naturalEnemys.push({})" style="margin-bottom:2rem" type="primary"> <i class="el-icon-plus"></i> 添加被克制英雄</el-button>
+                    <el-row type="flex" style="flex-wrap:wrap">
+                        <el-col style="border:1px solid #ccc;padding:0.5rem;margin:0.5rem" v-for="(item,i) in model.naturalEnemys" :key="i">
+                            <el-form-item label="被克制英雄">
+                                <el-select v-model="item.hero" filterable placeholder="请选择">
+                                    <el-option v-for="hero in heroes" :key="hero._id" :label="hero.name" :value="hero._id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="描述">
+                                <el-input autosize placeholder="搭档配合描述" type="textarea" v-model="item.description"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="danger" @click="model.naturalEnemys.splice(i,1)">删除英雄</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
+                <!-- 克制谁 -->
+
+                <el-tab-pane label="克制英雄" name="restrainOneselfs">
+                    <el-button @click="model.restrainOneselfs.push({})" style="margin-bottom:2rem" type="primary"> <i class="el-icon-plus"></i> 添加克制英雄</el-button>
+                    <el-row type="flex" style="flex-wrap:wrap">
+                        <el-col style="border:1px solid #ccc;padding:0.5rem;margin:0.5rem" v-for="(item,i) in model.restrainOneselfs" :key="i">
+                            <el-form-item label="克制英雄">
+                                <el-select v-model="item.hero" filterable placeholder="请选择">
+                                    <el-option v-for="hero in heroes" :key="hero._id" :label="hero.name" :value="hero._id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="描述">
+                                <el-input autosize placeholder="搭档配合描述" type="textarea" v-model="item.description"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="danger" @click="model.restrainOneselfs.splice(i,1)">删除英雄</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane>
             </el-tabs>
 
 
@@ -134,13 +204,17 @@
                 items: [],
                 // 铭文列表
                 runes: [],
+                // 英雄列表
+                heroes: [],
                 model: {
                     name: '',
                     avatar: '',
                     scores: {},
                     skills: [{
                         icon: ""
-                    }]
+                    }],
+                    banner: "",
+                    partners: []
                 },
             };
         },
@@ -151,11 +225,7 @@
             }
         },
         methods: {
-            // 上传装备图片
-            afterUpload(res) {
-                this.model.avatar = res.url
-            },
-            // 上传技能图片
+
             skillAfterUpload(res) {
                 console.log(res)
                 this.model.skills.icon = res.url
@@ -168,6 +238,11 @@
                         this.categories.push(r)
                     }
                 });
+            },
+            // 获取所有英雄
+            async fetchHeroes() {
+                const { data: res } = await this.$http.get("/rest/heroes")
+                this.heroes = res
             },
             // 获取装备
             async fetchItems() {
@@ -211,6 +286,8 @@
             this.fetchItems()
             // 获取铭文列表
             this.fetchRunes()
+            // 获取英雄列表
+            this.fetchHeroes()
         },
     }
 </script>
@@ -230,7 +307,7 @@
     .avatar-uploader-icon {
         font-size: 28px;
         color: #8c939d;
-        width: 108px;
+        min-width: 108px;
         height: 108px;
         line-height: 108px;
         text-align: center;
@@ -238,8 +315,7 @@
 
     .avatar {
         justify-content: center;
-
-        width: 108px;
+        min-width: 108px;
         height: 108px;
         display: block;
     }

@@ -12,8 +12,8 @@
                 <el-input v-model="model.property2"></el-input>
             </el-form-item>
             <el-form-item label="铭文图片" prop="icon">
-                <el-upload class="avatar-uploader" :action="$http.defaults.baseURL+'/upload'" :show-file-list="false" :on-success="afterUpload">
-                    <img v-if="model.icon" :src="model.icon" class="avatar">
+                <el-upload class="avatar-uploader" :headers="getAuthorization()" :action="ActionUrl" :show-file-list="false" :on-success="afterUpload">
+                    <img v-if="model.icon" v-lazy="model.icon" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-form-item>

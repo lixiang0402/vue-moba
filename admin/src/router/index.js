@@ -10,62 +10,62 @@ const routes = [{
         path: "/login",
         name: "Login",
         meta: { isPublic: true },
-        component: () => import('../views/Login'),
+        component: () => import( /* webpackChunkName: "group-login" */ '../views/Login'),
     },
     {
         path: '/',
         name: 'Main',
-        component: () => import('../views/Main.vue'),
+        component: () => import( /* webpackChunkName: "group-main" */ '../views/Main.vue'),
         children: [{
                 path: "/categories/edit",
                 name: "CategoriesEdit",
-                component: () => import('../views/Categories/CategoriesEdit.vue')
+                component: () => import( /* webpackChunkName: "group-categories" */ '../views/Categories/CategoriesEdit.vue')
             },
             {
                 path: "/categories/edit/:id",
                 name: "CategoriesEdit",
-                component: () => import('../views/Categories/CategoriesEdit.vue'),
+                component: () => import( /* webpackChunkName: "group-categories" */ '../views/Categories/CategoriesEdit.vue'),
                 props: true
             },
             {
                 path: "/categories/list",
                 name: "CategoriesList",
-                component: () => import('../views/Categories/CategoriesList.vue')
+                component: () => import( /* webpackChunkName: "group-categories" */ '../views/Categories/CategoriesList.vue')
             },
 
             {
                 path: "/items/edit",
                 name: "ItemsEdit",
-                component: () => import('../views/Items/ItemsEdit.vue')
+                component: () => import( /* webpackChunkName: "group-items" */ '../views/Items/ItemsEdit.vue')
             },
             {
                 path: "/items/edit/:id",
                 name: "ItemsEdit",
-                component: () => import('../views/Items/ItemsEdit.vue'),
+                component: () => import( /* webpackChunkName: "group-items" */ '../views/Items/ItemsEdit.vue'),
                 props: true
             },
             {
                 path: "/items/list",
                 name: "ItemsList",
-                component: () => import('../views/Items/ItemsList')
+                component: () => import( /* webpackChunkName: "group-items" */ '../views/Items/ItemsList')
             },
 
 
             {
                 path: "/runes/edit",
                 name: "RunesEdit",
-                component: () => import('../views/Runes/RunesEdit')
+                component: () => import( /* webpackChunkName: "group-runes" */ '../views/Runes/RunesEdit')
             },
             {
                 path: "/runes/edit/:id",
                 name: "RunesEdit",
-                component: () => import('../views/Runes/RunesEdit'),
+                component: () => import( /* webpackChunkName: "group-runes" */ '../views/Runes/RunesEdit'),
                 props: true
             },
             {
                 path: "/runes/list",
                 name: "RunesList",
-                component: () => import('../views/Runes/RunesList')
+                component: () => import( /* webpackChunkName: "group-runes" */ '../views/Runes/RunesList')
             },
 
 
@@ -73,53 +73,53 @@ const routes = [{
             {
                 path: "/heroes/edit",
                 name: "HeroesEdit",
-                component: () => import('../views/Heroes/HeroesEdit')
+                component: () => import( /* webpackChunkName: "group-heores" */ '../views/Heroes/HeroesEdit')
             },
             {
                 path: "/heroes/edit/:id",
                 name: "HeroesEdit",
-                component: () => import('../views/Heroes/HeroesEdit.vue'),
+                component: () => import( /* webpackChunkName: "group-heores" */ '../views/Heroes/HeroesEdit.vue'),
                 props: true
             },
             {
                 path: "/heroes/list",
                 name: "HeroesList",
-                component: () => import('../views/Heroes/HeroesList')
+                component: () => import( /* webpackChunkName: "group-heores" */ '../views/Heroes/HeroesList')
             },
 
 
             {
                 path: "/articles/edit",
                 name: "ArticlesEdit",
-                component: () => import('../views/Articles/ArticlesEdit')
+                component: () => import( /* webpackChunkName: "group-articles" */ '../views/Articles/ArticlesEdit')
             },
             {
                 path: "/articles/edit/:id",
                 name: "ArticlesEdit",
-                component: () => import('../views/Articles/ArticlesEdit'),
+                component: () => import( /* webpackChunkName: "group-articles" */ '../views/Articles/ArticlesEdit'),
                 props: true
             },
             {
                 path: "/articles/list",
                 name: "ArticlesList",
-                component: () => import('../views/Articles/ArticlesList')
+                component: () => import( /* webpackChunkName: "group-articles" */ '../views/Articles/ArticlesList')
             },
 
             {
                 path: "/ads/edit",
                 name: "AsEdit",
-                component: () => import('../views/Ads/AdsEdit')
+                component: () => import( /* webpackChunkName: "group-ads" */ '../views/Ads/AdsEdit')
             },
             {
                 path: "/ads/edit/:id",
                 name: "AdsEdit",
-                component: () => import('../views/Ads/AdsEdit'),
+                component: () => import( /* webpackChunkName: "group-ads" */ '../views/Ads/AdsEdit'),
                 props: true
             },
             {
                 path: "/ads/list",
                 name: "AdsList",
-                component: () => import('../views/Ads/AdsList')
+                component: () => import( /* webpackChunkName: "group-ads" */ '../views/Ads/AdsList')
             },
 
 
@@ -130,18 +130,18 @@ const routes = [{
             {
                 path: "/admin_user/edit",
                 name: "AdminUserEdit",
-                component: () => import('../views/AdminUser/AdminUserEdit')
+                component: () => import( /* webpackChunkName: "group-adminuser" */ '../views/AdminUser/AdminUserEdit')
             },
             {
                 path: "/admin_user/edit/:id",
                 name: "AdminUserEdit",
-                component: () => import('../views/AdminUser/AdminUserEdit'),
+                component: () => import( /* webpackChunkName: "group-adminuser" */ '../views/AdminUser/AdminUserEdit'),
                 props: true
             },
             {
                 path: "/admin_user/list",
                 name: "AdminUserList",
-                component: () => import('../views/AdminUser/AdminUserList')
+                component: () => import( /* webpackChunkName: "group-adminuser" */ '../views/AdminUser/AdminUserList')
             }
         ]
     },

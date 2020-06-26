@@ -7,6 +7,13 @@ module.exports = app => {
     const Category = require("../../models/Category")
     const Article = require("../../models/Article")
     const Hero = require("../../models/Hero")
+    const Item = require("../../models/Item")
+    const Rune = require("../../models/Rune")
+    // 获取首页轮播图
+    router.get("/swiper", async (req, res) => {
+        const data = await Ads.findOne({ name: "王者荣耀H5轮播图" })
+        res.send(data)
+    })
     // 初始化新闻数据
     router.get("/news/init", async (req, res) => {
         const news_title = ["峡谷端午过节指南", "云中君源·梦皮肤海报投票结果公布", "UI改造日志丨局内外交流功能优化：观战中好友也可预约！", "策划有话说丨聊聊荣耀战力计算规则的优化", "寻找“峡谷参谋”丨来线下玩家交流活动，见策划&amp;大神主播，赢专属局内称号", "6月22日体验服不停机更新公告", "6月20日体验服停机更新公告", "6月24日体验服停机更新公告", "6月19日体验服停机更新公告", "更新机制优化版本相关异常说明", "恭喜TS夺得2020年KPL春季赛总冠军，多重福利来袭", "应援KPL春决得好礼，上官婉儿-天狼绘梦者即将开售", "【破浪前行吧英雄们】活动开启公告", "参与活动免费解锁KPL限定皮肤个人专属购买6折特权", "新英雄蒙恬上架，多重好礼等你解锁", "无惧挑战向阳而生，TS冠军之夜今日18:00惊喜来袭", "虎牙明星主播踢馆名校战队，峡谷高材生与学霸的荣耀对决", "2020年KPL春季赛常规赛最佳阵容及最佳选手评选方式公布", "2020年KPL春季赛季后赛赛程赛制公布，5月28日16:00热血开战", "【原创内容大赛音乐比赛】优秀作品合集（二）"]
@@ -26,6 +33,7 @@ module.exports = app => {
         // await Article.insertMany(news)
         res.send(news)
     })
+    // 获取新闻资讯列表
     router.get("/news/list", async (req, res) => {
         const parent = await Category.findOne({ name: "新闻资讯" })
         const cats = await Category.aggregate([
@@ -60,9 +68,22 @@ module.exports = app => {
         })
         res.send(cats)
     })
-    // 获取首页轮播图
-    router.get("/swiper", async (req, res) => {
-        const data = await Ads.findOne({ name: "王者荣耀H5轮播图" })
+    // 获取新闻详情
+    router.get("/article/:id", async (req, res) => {
+        const id = req.params.id
+        const data = await Article.findById(id).lean()
+        const parent = await Category.findOne({ name: "新闻资讯" })
+        const catsD = await Category.aggregate([
+            { $match: { parent: parent._id } },
+        ])
+        const cats = catsD.map(r => r._id)
+        // data.releted = await Article.find().where({
+        //     categories: { $in: cats }
+        // }).limit(2)
+        let arr = await Article.find().where({ categories: { $in: cats } })
+        let newarr = arr.filter(r => r._id != id)
+        newarr = newarr.sort(function() { return Math.random() > 0.5 ? -1 : 1; });
+        data.releted = newarr.slice(0, 2)
         res.send(data)
     })
     // 初始化英雄数据
@@ -142,6 +163,35 @@ module.exports = app => {
             await Hero.insertMany(item.children)
         }
         res.send(defaultData)
+    })
+    // 获取英雄列表
+    router.get("/heroes/list", async (req, res) => {
+        const parent = await Category.findOne({ name: "英雄分类" })
+        const cats = await Category.aggregate([
+            { $match: { parent: parent._id } },
+            {
+                $lookup: {
+                    from: "heroes",
+                    localField: "_id",
+                    foreignField: "categories",
+                    as: "heroesList"
+                }
+            },
+        ])
+        const subCats = cats.map(v => v._id)
+        cats.unshift({
+            name: "热门",
+            heroesList: await Hero.find().where({
+                categories: { $in: subCats }
+            }).limit(10).lean()
+        })
+        res.send(cats)
+    })
+    // 获取英雄详情
+    router.get("/heroes/:id", async (req, res) => {
+        const id = req.params.id;
+        const hero = await Hero.findById(id).populate("categories items1 items2 runes partners.hero naturalEnemys.hero restrainOneselfs.hero")
+        res.send(hero)
     })
     app.use("/web/api", router)
 }
